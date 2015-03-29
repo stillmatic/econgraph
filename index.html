@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>D3 test</title>
     <link href="bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://bootswatch.com/paper/bootstrap.css">
     <link rel="stylesheet" href="dc.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -19,18 +20,19 @@
 <body>
     <div class="container">
         <div class="jumbotron">
-            <h1>d3mo</h1>
-            <p>chua@wharton.upenn.edu</p>
+            <h2>graph demo</h2>
+            <p>Contact: chua@wharton.upenn.edu</p>
             <p>Built with <a href="http://dc-js.github.io/dc.js/">dc.js</a>, <a href="http://square.github.io/crossfilter/">Crossfilter</a>, and <a href="http://d3js.org/">D3.js</a>.</p>
             <p>Crossfilter and dc-js are released under the Apache 2.0 license, and D3.js is released under the <a href="http://opensource.org/licenses/BSD-3-Clause"> BSD license.</a>
             </p>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <strong>Plain Chart</strong>
-                <p>Built with P70 data</p>
-                <button class="btn" onclick="button1()">1</button>
-                <button class="btn" onclick="button2()">2</button>
+                <strong>Singleton Chart</strong>
+                <p>Click on a button to load the corresponding dataset.</p>
+                <p>Enabled interactivity: mouse scroll-to-zoom, draggable y-axis.</p>
+                <button class="btn" onclick="button1()">P70</button>
+                <button class="btn" onclick="button2()">P75</button>
                 <!-- <button class="btn" onclick="button3()">3</button> -->
             </div>
             <div class="col-md-8">
