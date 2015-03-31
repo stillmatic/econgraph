@@ -4,6 +4,11 @@ var chart = c3.generate({
         url: 'test1.csv',
         x: 'x',
         type: 'line'
+    },
+    line: {
+    	connect: {
+    		null: false
+    	}
     }
 });
 
@@ -31,11 +36,10 @@ $(function() {
         max: valMap.length - 1,
         value: 0,
         slide: function(event, ui) {
-            $("#amount").val('P' + valMap[ui.value]);
+            $("#amount").val('Dataset: Pers' + valMap[ui.value]);
             chart.load({
-                url: urlMap[ui.value],
-                hide: 'x'
-            })
+                url: urlMap[ui.value]
+            });
         }
     });
 });
