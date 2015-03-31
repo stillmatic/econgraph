@@ -29,17 +29,33 @@
             <div class="col-md-4">
                 <strong>Singleton Chart</strong>
                 <p>Transform the visualization into any type of chart</p>
-                <button class="btn" onclick="bar()">To Bar</button>
-                <button class="btn" onclick="spline()">To Spline</button>
-                <button class="btn" onclick="line()">To Line</button>
-                <button class="btn" onclick="scatter()">To Scatter</button>
-                <br>
+                <p>
+                    <button class="btn" onclick="bar()">To Bar</button>
+                    <button class="btn" onclick="spline()">To Spline</button>
+                    <button class="btn" onclick="line()">To Line</button>
+                    <button class="btn" onclick="scatter()">To Scatter</button>
+                </p>
+                <p>Drag the slider to choose which dataset to use.</p>
                 <input type="text" id="amount" value="P70" />
                 <div id="slider-range"></div>
             </div>
             <div class="col-md-8">
                 <div id="chart">
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <strong>Column Charts</strong>
+                <p>Demos of stacked column charts.</p>
+            </div>
+            <div class="col-md-4">
+                <p class="text-center"><strong>CPS 2005 Females</strong></p>
+                <div id="chart-cps05"></div>
+            </div>
+            <div class="col-md-4">
+                <p class="text-center"><strong>Simulated 2005 Females</strong></p>
+                <div id="chart-sim05"></div>
             </div>
         </div>
     </div>

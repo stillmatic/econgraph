@@ -2,7 +2,7 @@ var chart = c3.generate({
     bindto: '#chart',
     data: {
         url: 'test1.csv',
-        hide: 'x',
+        x: 'x',
         type: 'line'
     }
 });
@@ -38,4 +38,47 @@ $(function() {
             })
         }
     });
+});
+
+var chart2 = c3.generate({
+    bindto: '#chart-cps05',
+    data: {
+        url: 'cps05.csv',
+        x: 'Age',
+        type: 'bar',
+        groups: [
+            ['Not In Labor Force', 'Full Time', 'Part Time']
+        ]
+    },
+    axis: {
+        x: {
+            type: 'category',
+            label: {
+                text: 'Age',
+                position: 'outer-center'
+            }
+        }
+    }
+});
+
+
+var chart2 = c3.generate({
+    bindto: '#chart-sim05',
+    data: {
+        url: 'sim05.csv',
+        x: 'Age',
+        type: 'bar',
+        groups: [
+            ['Not In Labor Force', 'Full Time', 'Part Time']
+        ]
+    },
+    axis: {
+        x: {
+            type: 'category',
+            label: {
+                text: 'Age',
+                position: 'outer-center'
+            }
+        }
+    }
 });
