@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>C3 test</title>
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://bootswatch.com/paper/bootstrap.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/cupertino/jquery-ui.css">
-    <link rel="stylesheet" href="c3.css">
+    <link href="assets/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/bootflat.css">
+    <link rel="stylesheet" href="assets/jquery-ui.css">
+    <link rel="stylesheet" href="assets/c3.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -19,32 +19,50 @@
 </head>
 
 <body>
+    <div class="col-md-12">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Graphs</a></div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#lines">Line Chart</a></li>
+                        <li><a href="#columnss">Column Charts</a></li>
+                    </ul>
+                    <p class="navbar-text navbar-right">
+                        <a class="navbar-link" href="mailto:chua@wharton.upenn.edu">Contact</a>
+                        </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
     <div class="container">
-        <div class="jumbotron">
-            <h2>graph demo</h2>
-            <p>Contact: chua@wharton.upenn.edu</p>
-            </p>
-        </div>
-        <div class="row">
+        <div class="row" id="lines">
             <div class="col-md-4">
-                <strong>Singleton Chart</strong>
+                <strong>Line Chart</strong>
                 <p>Transform the visualization into any type of chart</p>
                 <p>
-                    <button class="btn" onclick="bar()">To Bar</button>
-                    <button class="btn" onclick="spline()">To Spline</button>
-                    <button class="btn" onclick="line()">To Line</button>
-                    <button class="btn" onclick="scatter()">To Scatter</button>
+                    <div class="btn-group">
+                        <button class="btn btn-default" onclick="bar()">To Bar</button>
+                        <button class="btn btn-default" onclick="spline()">To Spline</button>
+                        <button class="btn btn-default" onclick="line()">To Line</button>
+                        <button class="btn btn-default" onclick="scatter()">To Scatter</button>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="nyt(0)">Save SVG</button>
+                    </div>
                 </p>
                 <p>Drag the slider to choose which dataset to use.</p>
-                <input type="text" id="amount" value="Dataset: Pers70" />
+                <input type="text" disabled id="amount" value="Dataset: Pers70" />
                 <div id="slider-range"></div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8" id="chart-container">
+                <p class="text-center"><strong>Chart Title</strong></p>
                 <div id="chart">
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="columns">
             <div class="col-md-4">
                 <strong>Column Charts</strong>
                 <p>Demos of stacked column charts.</p>
@@ -59,10 +77,14 @@
             </div>
         </div>
     </div>
-    <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <script src="d3.js"></script>
-    <script src="c3.js"></script>
+<!--     <div class="footer">
+        <div class="container">
+        </div>
+    </div> -->
+    <script src="assets/jquery-2.1.3.min.js"></script>
+    <script src="assets/jquery-ui.min.js"></script>
+    <script src="assets/d3.js"></script>
+    <script src="assets/c3.js"></script>
     <script src="app2.js"></script>
 </body>
 
