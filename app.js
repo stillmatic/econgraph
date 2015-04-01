@@ -1,89 +1,257 @@
-'use strict';
+// chua@wharton.upenn.edu
+// https://bitbucket.org/illmatic/ppi
 
-/* jshint globalstrict: true */
-/* global dc,d3,crossfilter,colorbrewer */
+//main line chart
+var chart = c3.generate({
+    bindto: '#chart',
+    data: {
+        url: 'data/test1.csv',
+        x: 'x',
+        type: 'line'
+    },
+    line: {
+        connect: {
+            null: false
+        }
+    },
+    point: {
+        show: false
+    }
+});
 
-var composite = dc.compositeChart('#plain-chart');
-var ndx, dim;
-
-function load_button(file) {
-    return function load_it() {
-        d3.csv(file, function(error, exp) {
-            ndx = crossfilter();
-            ndx.add(exp.map(function(d) {
-                return {
-                    x: +d.x,
-                    y1: +d.nonfam,
-                    y2: +d.sing_hd,
-                    y3: +d.dual_hd,
-                    y4: +d.dual_sp,
-                    y5: +d.kids_sing,
-                    y6: +d.kids_dual,
-                    y7: +d.total
-                };;
-            }));
-
-            dim = ndx.dimension(dc.pluck('x'));
-
-            var grp1 = dim.group().reduceSum(dc.pluck('y1')), // nonfam
-                grp2 = dim.group().reduceSum(dc.pluck('y2')), // sing_hd
-                grp3 = dim.group().reduceSum(dc.pluck('y3')), // dual_hd
-                grp4 = dim.group().reduceSum(dc.pluck('y4')), // dual_sp
-                grp5 = dim.group().reduceSum(dc.pluck('y5')), // kids_sing
-                grp6 = dim.group().reduceSum(dc.pluck('y6')), // kids_dual
-                grp7 = dim.group().reduceSum(dc.pluck('y7')); // total
-
-            composite
-                .width(768)
-                .height(480)
-                .x(d3.scale.linear().domain([0, 100]))
-                .yAxisLabel("Y")
-                .mouseZoomable(true)
-                .elasticY(true)
-                // .childOptions({
-                //     defined: function(d) {
-                //         return (!d.nonfam == null);
-                //     }
-                // })
-                .legend(dc.legend().x(580).y(20).itemHeight(13).gap(5))
-                .renderHorizontalGridLines(true)
-                .compose([
-                    dc.lineChart(composite)
-                    .dimension(dim)
-                    .colors('red')
-                    .group(grp1, "nonfam"),
-                    dc.lineChart(composite)
-                    .dimension(dim)
-                    .colors('blue')
-                    .group(grp2, "sing_hd"),
-                    dc.lineChart(composite)
-                    .dimension(dim)
-                    .colors('green')
-                    .group(grp3, "dual_hd"),
-                    dc.lineChart(composite)
-                    .dimension(dim)
-                    .colors('purple')
-                    .group(grp4, "dual_sp"),
-                    dc.lineChart(composite)
-                    .dimension(dim)
-                    .colors('gray')
-                    .group(grp5, "kids_sing"),
-                    dc.lineChart(composite)
-                    .dimension(dim)
-                    .colors('orange')
-                    .group(grp6, "kids_dual"),
-                    dc.lineChart(composite)
-                    .dimension(dim)
-                    .colors('brown')
-                    .group(grp7, "total")
-                ])
-                .brushOn(false)
-                .render();
-
-            dc.renderAll();
-        });
-    };
+function bar() {
+    chart.transform('bar');
 }
 
-var button1 = load_button("test1.csv"),
-    button2 = load_button("test2.csv");
+function spline() {
+    chart.transform('spline');
+}
+
+function line() {
+    chart.transform('line');
+}
+
+function scatter() {
+    chart.transform('scatter');
+}
+
+//slider
+$(function() {
+    var valMap = [70, 75, 80, 85, 90];
+    var urlMap = ['data/test1.csv', 'data/test2.csv', 'data/test3.csv', 'data/test4.csv', 'data/test5.csv']
+    $("#slider-range").slider({
+        min: 0,
+        max: valMap.length - 1,
+        value: 0,
+        slide: function(event, ui) {
+            $("#amount").val('Dataset: Pers' + valMap[ui.value]);
+            chart.load({
+                url: urlMap[ui.value]
+            });
+        }
+    });
+});
+
+//abstracted bar
+function generateBar(binding, path) {
+    c3.generate({
+        bindto: binding,
+        data: {
+            url: path,
+            x: 'Age',
+            type: 'bar',
+            groups: [
+                ['Not In Labor Force', 'Full Time', 'Part Time']
+            ]
+        },
+        axis: {
+            x: {
+                type: 'category',
+                label: {
+                    text: 'Age',
+                    position: 'outer-center'
+                }
+            }
+        }
+    });
+}
+
+//initialize bar
+generateBar('#chart-cps05', 'data/cps05.csv')
+generateBar('#chart-sim05', 'data/sim05.csv')
+
+var prefix = {
+    xmlns: "http://www.w3.org/2000/xmlns/",
+    xlink: "http://www.w3.org/1999/xlink",
+    svg: "http://www.w3.org/2000/svg"
+};
+
+
+/* following from https://github.com/NYTimes/svg-crowbar
+Copyright (c) 2013 The New York Times
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of 
+this software and associated documentation files (the "Software"), to deal in 
+the Software without restriction, including without limitation the rights to 
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+var doctype = '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+var body = document.body,
+    emptySvg;
+
+function nyt(val) {
+    var objects = document.querySelectorAll("object"),
+        documents = [window.document],
+        SVGSources = [];
+    var emptySvg = window.document.createElementNS(prefix.svg, 'svg');
+    window.document.body.appendChild(emptySvg);
+    var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
+
+    [].forEach.call(objects, function(el) {
+        try {
+            if (el.contentDocument) {
+                documents.push(el.contentDocument);
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    });
+    documents.forEach(function(doc) {
+        var newSources = getSources(doc, emptySvgDeclarationComputed);
+        // because of prototype on NYT pages
+        for (var i = 0; i < newSources.length; i++) {
+            SVGSources.push(newSources[i]);
+        }
+    });
+    if (SVGSources.length > 0) {
+        download(SVGSources[val]); //abstract this out
+    } else {
+        alert("The Crowbar couldn’t find any SVG nodes.");
+    }
+
+}
+
+function getSources(doc, emptySvgDeclarationComputed) {
+    var svgInfo = [],
+        svgs = doc.querySelectorAll("svg");
+
+    [].forEach.call(svgs, function(svg) {
+
+        svg.setAttribute("version", "1.1");
+
+        // removing attributes so they aren't doubled up
+        svg.removeAttribute("xmlns");
+        svg.removeAttribute("xlink");
+
+        // These are needed for the svg
+        if (!svg.hasAttributeNS(prefix.xmlns, "xmlns")) {
+            svg.setAttributeNS(prefix.xmlns, "xmlns", prefix.svg);
+        }
+
+        if (!svg.hasAttributeNS(prefix.xmlns, "xmlns:xlink")) {
+            svg.setAttributeNS(prefix.xmlns, "xmlns:xlink", prefix.xlink);
+        }
+
+        setInlineStyles(svg, emptySvgDeclarationComputed);
+
+        var source = (new XMLSerializer()).serializeToString(svg);
+        var rect = svg.getBoundingClientRect();
+        svgInfo.push({
+            top: rect.top,
+            left: rect.left,
+            width: rect.width,
+            height: rect.height,
+            class: svg.getAttribute("class"),
+            id: svg.getAttribute("id"),
+            childElementCount: svg.childElementCount,
+            source: [doctype + source]
+        });
+    });
+    return svgInfo;
+}
+
+function download(source) {
+    var filename = "untitled";
+
+    if (source.id) {
+        filename = source.id;
+    } else if (source.class) {
+        filename = source.class;
+    } else if (window.document.title) {
+        filename = window.document.title.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+    }
+
+    var url = window.URL.createObjectURL(new Blob(source.source, {
+        "type": "text\/xml"
+    }));
+
+    var a = document.createElement("a");
+    body.appendChild(a);
+    a.setAttribute("class", "svg-crowbar");
+    a.setAttribute("download", filename + ".svg");
+    a.setAttribute("href", url);
+    a.style["display"] = "none";
+    a.click();
+
+    setTimeout(function() {
+        window.URL.revokeObjectURL(url);
+    }, 10);
+}
+
+function setInlineStyles(svg, emptySvgDeclarationComputed) {
+
+    function explicitlySetStyle(element) {
+        var cSSStyleDeclarationComputed = getComputedStyle(element);
+        var i, len, key, value;
+        var computedStyleStr = "";
+        for (i = 0, len = cSSStyleDeclarationComputed.length; i < len; i++) {
+            key = cSSStyleDeclarationComputed[i];
+            value = cSSStyleDeclarationComputed.getPropertyValue(key);
+            if (value !== emptySvgDeclarationComputed.getPropertyValue(key)) {
+                computedStyleStr += key + ":" + value + ";";
+            }
+        }
+        element.setAttribute('style', computedStyleStr);
+    }
+
+    function traverse(obj) {
+            var tree = [];
+            tree.push(obj);
+            visit(obj);
+
+            function visit(node) {
+                if (node && node.hasChildNodes()) {
+                    var child = node.firstChild;
+                    while (child) {
+                        if (child.nodeType === 1 && child.nodeName != 'SCRIPT') {
+                            tree.push(child);
+                            visit(child);
+                        }
+                        child = child.nextSibling;
+                    }
+                }
+            }
+            return tree;
+        }
+        // hardcode computed css styles inside svg
+    var allElements = traverse(svg);
+    var i = allElements.length;
+    while (i--) {
+        explicitlySetStyle(allElements[i]);
+    }
+}
+
+// END NYT JS
